@@ -5,8 +5,12 @@ from datetime import datetime
 from src.data_loader import preprocess_data
 
 # Пути
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'models', 'uber_model.joblib')
-INPUT_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'raw', 'uber-raw-data-may14.csv')
+MODEL_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'models', 'uber_model.joblib'
+)
+INPUT_PATH = os.path.join(
+    os.path.dirname(__file__), '..', 'data', 'raw', 'uber-raw-data-may14.csv'
+)
 PRED_PATH = 'predictions.csv'
 REPORT_PATH = 'report.html'
 
@@ -29,6 +33,11 @@ X.to_csv(PRED_PATH, index=False)
 print(f"✅ Предсказания сохранены в {PRED_PATH}")
 
 # HTML отчёт
+report_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+table_html = X[
+    ['hour', 'day_of_week', 'month', 'predicted_rides']
+].to_html(index=False)
+
 html = f"""
 <!DOCTYPE html>
 <html>
@@ -38,10 +47,10 @@ html = f"""
 </head>
 <body>
     <h1>🚕 Uber Inference Report</h1>
-    <p><strong>Дата:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+    <p><strong>Дата:</strong> {report_date}</p>
     <p><strong>Количество примеров:</strong> {len(preds)}</p>
     <p><strong>Предсказания (первые 10):</strong></p>
-    {X[['hour', 'day_of_week', 'month', 'predicted_rides']].to_html(index=False)}
+    {table_html}
 </body>
 </html>
 """
@@ -49,4 +58,6 @@ html = f"""
 with open(REPORT_PATH, 'w', encoding='utf-8') as f:
     f.write(html)
 
-print(f"📄 Отчёт сохранён в {REPORT_PATH}")
+print(
+    f"📄 Отчёт сохранён в {REPORT_PATH}"
+)
