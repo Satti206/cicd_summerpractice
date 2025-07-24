@@ -92,4 +92,28 @@ jobs:
           push: true
           tags: ghcr.io/satti206/uber-api:latest
 
+      - name: 🔐 Авторизация в Yandex Cloud
+        uses: yc-actions/yc-cli@v1
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SERVICE_ACCOUNT_KEY }}
+
+      - name: 🐳 Сборка и пуш в YCR
+        run: |
+          yc config set container-registry-id <твой-registry-id>
+          docker build -t cr.yandex/<registry-id>/uber-api:latest .
+          docker push cr.yandex/<registry-id>/uber-api:latest
+
+      - name: 🚀 Деплой в Yandex Cloud Run
+        run: |
+          yc serverless container create-or-update \
+            --name uber-api \
+            --image cr.yandex/<registry-id>/uber-api:latest \
+            --memory 512M \
+            --cores 1 \
+            --core-fraction 50 \
+            --execution-timeout 10s \
+            --port 8000 \
+            --allow-unauthenticated
+
+
 
