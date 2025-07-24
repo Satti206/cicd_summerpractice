@@ -72,23 +72,24 @@ jobs:
       - name: 🔄 Checkout репозитория
         uses: actions/checkout@v3
 
-      - name: 📥 Download model artifact
+      - name: 📥 Загрузка модели uber_model
         uses: actions/download-artifact@v4
         with:
-          name: model
+          name: uber_model
           path: models
 
-      - name: Log in to GitHub Container Registry
+      - name: 🔐 Логин в GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: 🐳 Сборка и пуш Docker-образа
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/karen9955/titanic-api:latest
+          tags: ghcr.io/satti206/uber-api:latest
+
 
