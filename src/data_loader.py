@@ -8,12 +8,12 @@ def load_data(path: str):
 
 
 def preprocess_data(df: pd.DataFrame):
-    """Предобрабатывает DataFrame:
+    """
+    Предобрабатывает DataFrame:
     - извлекает признаки из времени
     - группирует поездки по часу
     Возвращает (X, y), где y — количество поездок в час.
     """
-
     df = df.copy()
 
     # Извлекаем временные признаки
@@ -23,7 +23,9 @@ def preprocess_data(df: pd.DataFrame):
     df["date_hour"] = df["Date/Time"].dt.floor("h")
 
     # Группировка по часу
-    agg_df = df.groupby(["date_hour", "hour", "day_of_week", "month"]).size().reset_index(name="rides")
+    agg_df = df.groupby(
+        ["date_hour", "hour", "day_of_week", "month"]
+    ).size().reset_index(name="rides")
 
     # Формируем X и y
     X = agg_df[["hour", "day_of_week", "month"]]
@@ -42,7 +44,8 @@ def load_sample_data(path: str, test_size=0.2, random_state=42):
     """Загружает и делит данные на обучающую и тестовую выборки."""
     X, y = load_and_preprocess(path)
     return train_test_split(
-        X, y,
+        X,
+        y,
         test_size=test_size,
-        random_state=random_state
+        random_state=random_state,
     )

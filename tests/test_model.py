@@ -1,6 +1,7 @@
 from src.model import train_model
 import pandas as pd
 
+
 def test_train_model_basic():
     # Простейший синтетический датасет
     X = pd.DataFrame({

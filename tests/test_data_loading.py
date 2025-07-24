@@ -1,5 +1,6 @@
 from src.data_loader import load_sample_data
 
+
 def test_local_data_loading():
     PATH = "/Users/satti/PycharmProjects/cicd_summerpractice/data/raw/uber-raw-data-may14.csv"
     X_train, X_test, y_train, y_test = load_sample_data(PATH)
