@@ -39,25 +39,30 @@ jobs:
           pip install pytest
           pytest -s tests
 
-      - name: 🤖 Обучение модели (src/train.py)
+      - name: 🤖 Обучение модели
         run: python src/train.py
 
-      - name: 📦 Загрузка модели как артефакта
+      - name: 📦 Сохранение модели как артефакта
         uses: actions/upload-artifact@v4
         with:
-          name: model
-          path: models/model.joblib
+          name: uber_model
+          path: models/uber_model.joblib
 
-      - name: 🔮 Инференс модели (src/inference.py)
+      - name: 🔮 Инференс (src/inference.py)
         run: python src/inference.py
 
-      - name: 📦 Загрузка артефактов инференса
+      - name: 📦 Сохранение предсказаний
         uses: actions/upload-artifact@v4
         with:
-          name: inference-results
-          path: |
-            predictions.csv
-            report.html
+          name: inference-csv
+          path: predictions.csv
+
+      - name: 📄 Сохранение HTML-отчёта
+        uses: actions/upload-artifact@v4
+        with:
+          name: inference-report
+          path: report.html
+
 
   publish:
     name: Build & Push Docker image to GHCR
