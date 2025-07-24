@@ -6,7 +6,6 @@ from src.data_loader import load_sample_data
 
 # Пути
 DATA_PATH = (
-    "/Users/satti/PycharmProjects/cicd_summerpractice/"
     "data/raw/uber-raw-data-may14.csv"
 )
 
