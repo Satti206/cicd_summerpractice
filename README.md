@@ -80,11 +80,6 @@ POST-запрос к `/predict`:
 
 ---
 
-## 🔗 Демо
-
-➡️ [Swagger UI: `https://...yandexcloud.net/docs`](https://...yandexcloud.net/docs)
-
----
 
 ## 📁 Источник данных
 
