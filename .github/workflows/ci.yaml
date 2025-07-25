@@ -87,7 +87,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/uber-api:latest
+          tags: ghcr.io/satti206/uber-api:latest
 
   deploy:
     name: Deploy to Yandex Cloud
