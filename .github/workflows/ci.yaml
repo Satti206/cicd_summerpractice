@@ -65,9 +65,10 @@ jobs:
 
 
   publish:
-    name: Build & Push Docker image to GHCR
+    name: Build & Deploy to Yandex Cloud Run
     runs-on: ubuntu-latest
     needs: build
+
     steps:
       - name: 🔄 Checkout репозитория
         uses: actions/checkout@v3
@@ -78,42 +79,35 @@ jobs:
           name: uber_model
           path: models
 
-      - name: 🔐 Логин в GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🐳 Сборка и пуш Docker-образа
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/satti206/uber-api:latest
-
-      - name: 🔐 Авторизация в Yandex Cloud
-        uses: yc-actions/yc-cli@v1
-        with:
-          yc-sa-json-credentials: ${{ secrets.YC_SERVICE_ACCOUNT_KEY }}
-
-      - name: 🐳 Сборка и пуш в YCR
+      - name: 🛠️ Установка Yandex Cloud CLI
         run: |
-          yc config set container-registry-id <твой-registry-id>
-          docker build -t cr.yandex/<registry-id>/uber-api:latest .
-          docker push cr.yandex/<registry-id>/uber-api:latest
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+          echo "${HOME}/yandex-cloud/bin" >> $GITHUB_PATH
+
+      - name: 🧾 Авторизация в Yandex Cloud
+        env:
+          YC_KEY: ${{ secrets.YC_SERVICE_ACCOUNT_KEY }}
+        run: |
+          echo "$YC_KEY" > key.json
+          yc config set service-account-key key.json
+          yc config set cloud-id b1g0ocnghase9aold1tr
+          yc config set folder-id b1g023fufcevdtflqpf4
+          yc config set compute-default-zone ru-central1-a
+
+      - name: 🐳 Сборка и пуш Docker-образа в YCR
+        run: |
+          yc config set container-registry-id crpn9crur6a251hdal1p
+          docker build -t cr.yandex/crpn9crur6a251hdal1p/uber-api:latest .
+          yc container image push cr.yandex/crpn9crur6a251hdal1p/uber-api:latest
 
       - name: 🚀 Деплой в Yandex Cloud Run
         run: |
           yc serverless container create-or-update \
             --name uber-api \
-            --image cr.yandex/<registry-id>/uber-api:latest \
+            --image cr.yandex/crpn9crur6a251hdal1p/uber-api:latest \
             --memory 512M \
             --cores 1 \
             --core-fraction 50 \
             --execution-timeout 10s \
             --port 8000 \
             --allow-unauthenticated
-
-
-
