@@ -116,11 +116,11 @@ jobs:
 
       - name: 📥 Pull image from GHCR
         run: |
-          docker pull ghcr.io/${{ github.repository_owner }}/uber-api:latest
+          docker pull ghcr.io/satti206/uber-api:latest
 
       - name: 🔖 Tag image for Yandex CR
         run: |
-          docker tag ghcr.io/${{ github.repository_owner }}/uber-api:latest cr.yandex/${{ secrets.YC_REGISTRY_ID }}/uber-api:latest
+          docker tag ghcr.io/satti206/uber-api:latest cr.yandex/${{ secrets.YC_REGISTRY_ID }}/uber-api:latest
 
       - name: 📤 Push image to Yandex CR
         run: |
