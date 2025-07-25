@@ -129,7 +129,7 @@ jobs:
       - name: 🚀 Deploy container revision
         run: |
           yc serverless container revision deploy \
-            --container-name ml-api \
+            --container-name uber-registry \
             --image cr.yandex/${{ secrets.YC_REGISTRY_ID }}/uber-api:latest \
             --cores 1 \
             --concurrency 4 \
