@@ -96,9 +96,9 @@ jobs:
 
       - name: 🐳 Сборка и пуш Docker-образа в YCR
         run: |
-          yc config set container-registry-id crpn9crur6a251hdal1p
           docker build -t cr.yandex/crpn9crur6a251hdal1p/uber-api:latest .
           yc container image push cr.yandex/crpn9crur6a251hdal1p/uber-api:latest
+      
 
       - name: 🚀 Деплой в Yandex Cloud Run
         run: |
