@@ -99,12 +99,12 @@ jobs:
           YC_KEY: ${{ secrets.YC_SERVICE_ACCOUNT_KEY }}
         run: |
           echo "$YC_KEY" > key.json
-          SA_ID=$(jq -r .service_account_id key.json)
-          YC_TOKEN=$(yc iam create-token)
-          docker login -u json_key -p "$YC_TOKEN" cr.yandex
+
+          docker login -u json_key -p "$(cat key.json)" cr.yandex
 
           docker build -t cr.yandex/crpn9crur6a251hdal1p/uber-api:latest .
           docker push cr.yandex/crpn9crur6a251hdal1p/uber-api:latest
+      
       
       
 
