@@ -129,12 +129,13 @@ jobs:
       - name: 🚀 Deploy container revision
         run: |
           yc serverless container revision deploy \
-            --container-name uber-registry \
+            --container-name ml-api \
             --image cr.yandex/${{ secrets.YC_REGISTRY_ID }}/uber-api:latest \
             --cores 1 \
             --concurrency 4 \
             --execution-timeout 30s \
             --service-account-id "${{ secrets.YC_SA_ID }}"
+      
 
       - name: 🌍 Make container public (first time only)
         run: |
